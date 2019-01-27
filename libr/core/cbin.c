@@ -1299,7 +1299,6 @@ static void set_bin_relocs(RCore *r, RBinReloc *reloc, ut64 addr, Sdb **db, char
 
 	if (reloc->import && reloc->import->name[0]) {
 		char str[R_FLAG_NAME_SIZE];
-		RFlagItem *fi;
 
 		if (is_pe && !is_sandbox && strstr (reloc->import->name, "Ordinal")) {
 			const char *TOKEN = ".dll_Ordinal_";
@@ -1360,8 +1359,6 @@ static void set_bin_relocs(RCore *r, RBinReloc *reloc, ut64 addr, Sdb **db, char
 		if (bin_demangle) {
 			demname = r_bin_demangle (r->bin->cur, lang, str, addr);
 		}
-		r_name_filter (str, 0);
-		fi = r_flag_set (r->flags, str, addr, bin_reloc_size (reloc));
 		if (demname) {
 			char *realname;
 			if (r->bin->prefix) {
@@ -1369,7 +1366,12 @@ static void set_bin_relocs(RCore *r, RBinReloc *reloc, ut64 addr, Sdb **db, char
 			} else {
 				realname = sdb_fmt ("reloc.%s", demname);
 			}
-			r_flag_item_set_realname (fi, realname);
+			r_name_filter (realname, 0);
+			r_flag_set (r->flags, realname, addr, bin_reloc_size (reloc));
+			free(demname);
+		} else {
+			r_name_filter (str, 0);
+			r_flag_set (r->flags, str, addr, bin_reloc_size (reloc));
 		}
 	} else {
 		char *reloc_name = get_reloc_name (r, reloc, addr);
