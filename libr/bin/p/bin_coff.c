@@ -52,6 +52,7 @@ static bool _fill_bin_symbol(struct r_bin_coff_obj *bin, int idx, RBinSymbol **s
 	}
 	s = &bin->symbols[idx];
 	char *coffname = r_coff_symbol_name (bin, s);
+	r_str_replace_ch(coffname, '`', '_', true);
 	if (!coffname) {
 		return false;
 	}

@@ -91,6 +91,8 @@ R_API void r_bin_filter_sym(RBinFile *bf, HtPP *ht, ut64 vaddr, RBinSymbol *sym)
 		}
 	}
 
+	r_str_replace_ch(sym->name, '`', '_', true);
+
 	const char *uname = sdb_fmt ("%" PFMT64x ".%s", vaddr, name);
 	bool res = ht_pp_insert (ht, uname, sym);
 	if (!res) {
@@ -125,6 +127,16 @@ R_API void r_bin_filter_symbols(RBinFile *bf, RList *list) {
 		}
 	}
 	ht_pp_free (ht);
+}
+
+R_API void r_bin_filter_imports(RList *list) {
+	RListIter *iter;
+	RBinImport* imp;
+	r_list_foreach (list, iter, imp) {
+		if (imp->name) {
+			r_str_replace_ch(imp->name, '`', '_', true);
+		}
+	}
 }
 
 R_API void r_bin_filter_sections(RBinFile *bf, RList *list) {

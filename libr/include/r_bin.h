@@ -798,6 +798,7 @@ R_API RList *r_bin_get_mem(RBin *bin);
 /* filter.c */
 R_API void r_bin_load_filter(RBin *bin, ut64 rules);
 R_API void r_bin_filter_symbols(RBinFile *bf, RList *list);
+R_API void r_bin_filter_imports(RList *list);
 R_API void r_bin_filter_sections(RBinFile *bf, RList *list);
 R_API char *r_bin_filter_name(RBinFile *bf, Sdb *db, ut64 addr, char *name);
 R_API void r_bin_filter_sym(RBinFile *bf, HtPP *ht, ut64 vaddr, RBinSymbol *sym);
